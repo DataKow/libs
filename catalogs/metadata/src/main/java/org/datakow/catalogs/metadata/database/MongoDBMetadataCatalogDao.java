@@ -199,41 +199,6 @@ public class MongoDBMetadataCatalogDao {
         return new MongoRecordStream<>(ops.getConverter(), MetadataCatalogRecord.class, iterator.cursor());
     }
     
-    
-    /**
-     * Uses the MongoDB aggregation pipeline to perform an aggregate search on data.
-     * <p>
-     * Aggregation is the act of grouping data and using functions to collect stats
-     * on the group.
-     * <p>
-     * The pipeline is is constructed in the following way.
-     * <p>
-     * match(fiql) - sort(sortString|groupSort) - (first|last OR min|max|sum|avg|stdDevPop|stDevSamp) - sort(sortString) - limit
-     * 
-     * @param collectionName The catalog to perform the query on
-     * @param fiql A FLQL query to narrow down the data
-     * @param sortString Using sortString without groupSort will cause groupSort = sortString
-     * @param limit Final limit on number of results
-     * @param projection Accidently left projection parameter in this method. Do Not Use
-     * @param groupBy The property to group the query by
-     * @param groupSort The sort applied after the match is found but before the aggregation functions are applied.
-     * @param near Applies a geoNear sphere stage to the pipeline at the end but before project
-     * @param coherence The data coherence value to use for the query
-     * @param groupFuncs Array of group functions to include in the query
-     * @return A stream of results that represent the output of your query
-     * @deprecated Use aggregate with the String or List&lt;Document&gt; pipeline
-     */
-    @Deprecated
-    public MongoRecordStream<MetadataCatalogRecord> aggregate(
-            String collectionName, String fiql, String sortString, 
-            int limit, List<String> projection, String groupBy, 
-            String groupSort, String near, MetadataDataCoherence coherence, List<String> groupFuncs){
-
-        List<Document> pipeline = makeAggregationPipeline(fiql, sortString, limit, projection, groupBy, groupSort, near, groupFuncs);
-        return aggregate(collectionName, pipeline, coherence);
-        
-    }
-    
     public MongoRecordStream<MetadataCatalogRecord> aggregate(String collectionName, String pipeline, MetadataDataCoherence coherence){
         List<String> stages = Arrays.asList(pipeline.split("\\|"));
         List<Document> pipelineList = makeAggregationPipeline(stages);

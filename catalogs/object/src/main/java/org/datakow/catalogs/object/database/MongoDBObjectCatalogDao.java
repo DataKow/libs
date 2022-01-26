@@ -15,6 +15,7 @@ import com.mongodb.client.result.UpdateResult;
 
 import org.datakow.configuration.mongo.MongoConfigurationProperties;
 import org.datakow.core.components.CatalogIdentity;
+import org.datakow.core.components.DotNotationList;
 import org.datakow.core.components.DotNotationMap;
 import org.datakow.fiql.MongoFiqlParser;
 import java.util.ArrayList;
@@ -383,11 +384,11 @@ public class MongoDBObjectCatalogDao {
             doc.append(ObjectCatalogProperty.TAGS_KEY, input.getTags());
         }
         if (input.getObjectMetadataIdentities() != null && !input.getObjectMetadataIdentities().isEmpty()){
-            doc.append(ObjectCatalogProperty.METADATA_IDENTITIES_KEY, Document.parse(input.getObjectMetadataIdentities().toJson()));
+            doc.append(ObjectCatalogProperty.METADATA_IDENTITIES_KEY, DotNotationList.fromJson(input.getObjectMetadataIdentities().toJson()));
         }
-        if (input.getMetadataCatalogIdentifiers()!= null && !input.getMetadataCatalogIdentifiers().isEmpty()){
-            doc.append(ObjectCatalogProperty.METADATA_CATALOG_IDENTIFIERS_KEY, input.getMetadataCatalogIdentifiers());
-        }
+        // if (input.getMetadataCatalogIdentifiers()!= null && !input.getMetadataCatalogIdentifiers().isEmpty()){
+        //     doc.append(ObjectCatalogProperty.METADATA_CATALOG_IDENTIFIERS_KEY, input.getMetadataCatalogIdentifiers());
+        // }
         return doc;
     }
     
@@ -447,18 +448,19 @@ public class MongoDBObjectCatalogDao {
                                     }
                                 }
                             }
-                            if (identity.containsKey(ObjectCatalogProperty.METADATA_CATALOG_IDENTIFIERS_KEY)){
-                                BasicDBList catalogIdentifierList = (BasicDBList)identity.get(ObjectCatalogProperty.METADATA_CATALOG_IDENTIFIERS_KEY);
-                                if(catalogIdentifierList != null && !catalogIdentifierList.isEmpty()){
-                                    List<String> identifiers = new ArrayList<>();
-                                    for(Object catalogIdentifier : catalogIdentifierList){
-                                        identifiers.add((String)catalogIdentifier);
-                                    }
-                                    catalogObj.setMetadataCatalogIdentifiers(identifiers);
-                                }
-                            }
+                            // if (identity.containsKey(ObjectCatalogProperty.METADATA_CATALOG_IDENTIFIERS_KEY)){
+                            //     BasicDBList catalogIdentifierList = (BasicDBList)identity.get(ObjectCatalogProperty.METADATA_CATALOG_IDENTIFIERS_KEY);
+                            //     if(catalogIdentifierList != null && !catalogIdentifierList.isEmpty()){
+                            //         List<String> identifiers = new ArrayList<>();
+                            //         for(Object catalogIdentifier : catalogIdentifierList){
+                            //             identifiers.add((String)catalogIdentifier);
+                            //         }
+                            //         catalogObj.setMetadataCatalogIdentifiers(identifiers);
+                            //     }
+                            // }
                             if (identity.containsKey(ObjectCatalogProperty.METADATA_IDENTITIES_KEY)){
-                                BasicDBList metadataIdentities = (BasicDBList)identity.get(ObjectCatalogProperty.METADATA_IDENTITIES_KEY);
+                                BasicDBList metadataIdentities = new BasicDBList();
+                                metadataIdentities.addAll((ArrayList<CatalogIdentity>)identity.get(ObjectCatalogProperty.METADATA_IDENTITIES_KEY));
                                 for(Object i : metadataIdentities){
                                     catalogObj.getObjectMetadataIdentities().add(CatalogIdentity.fromJson(((Document)i).toJson()));
                                 }

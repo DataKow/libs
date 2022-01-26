@@ -5,8 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.datakow.core.components.CatalogIdentity;
 import org.datakow.core.components.CatalogIdentityCollection;
 import org.datakow.core.components.DatakowObjectMapper;
+
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,20 +141,24 @@ public class ObjectCatalogRecordInput {
         this.objectMetadataIdentities = objectMetadataIdentities;
     }
 
-    @JsonProperty("Metadata-Catalog-Identifiers")
-    public List<String> getMetadataCatalogIdentifiers() {
-        return metadataCatalogIdentifiers;
+    public void addObjectMetadataIdentity(CatalogIdentity identity){
+        this.objectMetadataIdentities.add(identity);
     }
 
-    @JsonProperty("Metadata-Catalog-Identifiers")
-    public void setMetadataCatalogIdentifiers(String ... metadataCatalogIdentifiers) {
-        this.metadataCatalogIdentifiers = Arrays.asList(metadataCatalogIdentifiers);
-    }
+    // @JsonProperty("Metadata-Catalog-Identifiers")
+    // public List<String> getMetadataCatalogIdentifiers() {
+    //     return metadataCatalogIdentifiers;
+    // }
 
-    @JsonProperty("Metadata-Catalog-Identifiers")
-    public void setMetadataCatalogIdentifiers(List<String> metadataCatalogIdentifiers) {
-        this.metadataCatalogIdentifiers = metadataCatalogIdentifiers;
-    }
+    // @JsonProperty("Metadata-Catalog-Identifiers")
+    // public void setMetadataCatalogIdentifiers(String ... metadataCatalogIdentifiers) {
+    //     this.metadataCatalogIdentifiers = Arrays.asList(metadataCatalogIdentifiers);
+    // }
+
+    // @JsonProperty("Metadata-Catalog-Identifiers")
+    // public void setMetadataCatalogIdentifiers(List<String> metadataCatalogIdentifiers) {
+    //     this.metadataCatalogIdentifiers = metadataCatalogIdentifiers;
+    // }
     
     /**
      * Sets the tags for an object
@@ -210,6 +218,10 @@ public class ObjectCatalogRecordInput {
     @JsonIgnore
     public void setData(InputStream data){
         this.objectData = data;
+    }
+
+    public void setData(String data){
+        this.setData(new ByteArrayInputStream(data.getBytes()));
     }
     
     

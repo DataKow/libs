@@ -131,9 +131,9 @@ public class ObjectCatalogWebserviceClient {
                     if (response.getHeaders().containsKey("Tags")){
                         record.setTags(Arrays.asList(StringUtils.commaDelimitedListToStringArray(response.getHeaders().getFirst("Tags"))));
                     }
-                    if (response.getHeaders().containsKey("Metadata-Catalog-Identifiers")){
-                        record.setMetadataCatalogIdentifiers(StringUtils.commaDelimitedListToStringArray(response.getHeaders().getFirst("Metadata-Catalog-Identifiers")));
-                    }
+                    // if (response.getHeaders().containsKey("Metadata-Catalog-Identifiers")){
+                    //     record.setMetadataCatalogIdentifiers(StringUtils.commaDelimitedListToStringArray(response.getHeaders().getFirst("Metadata-Catalog-Identifiers")));
+                    // }
                     if (response.getHeaders().containsKey("Publish-Date")){
                         SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
                         try {
@@ -368,9 +368,9 @@ public class ObjectCatalogWebserviceClient {
         if (!object.getTags().isEmpty()){
             headers.add("Tags", String.join(",", object.getTags()));
         }
-        if (object.getMetadataCatalogIdentifiers() != null && !object.getMetadataCatalogIdentifiers().isEmpty()){
-            headers.add("Metadata-Catalog-Identifiers", object.getMetadataCatalogIdentifiers().stream().collect(Collectors.joining(",")));
-        }
+        // if (object.getMetadataCatalogIdentifiers() != null && !object.getMetadataCatalogIdentifiers().isEmpty()){
+        //     headers.add("Metadata-Catalog-Identifiers", object.getMetadataCatalogIdentifiers().stream().collect(Collectors.joining(",")));
+        // }
         if (object.getObjectMetadataIdentities().size() > 0){
             headers.add("Metadata-Identities", object.getObjectMetadataIdentities().toHttpHeader());
         }
@@ -438,9 +438,9 @@ public class ObjectCatalogWebserviceClient {
         if (object.getTags() != null && !object.getTags().isEmpty()){
             headers.add("Tags", String.join(",", object.getTags()));
         }
-        if (object.getMetadataCatalogIdentifiers() != null && !object.getMetadataCatalogIdentifiers().isEmpty()){
-            headers.add("Metadata-Catalog-Identifiers", object.getMetadataCatalogIdentifiers().stream().collect(Collectors.joining(",")));
-        }
+        // if (object.getMetadataCatalogIdentifiers() != null && !object.getMetadataCatalogIdentifiers().isEmpty()){
+        //     headers.add("Metadata-Catalog-Identifiers", object.getMetadataCatalogIdentifiers().stream().collect(Collectors.joining(",")));
+        // }
         if (object.getObjectMetadataIdentities() != null && object.getObjectMetadataIdentities().size() > 0){
             headers.add("Metadata-Identities", object.getObjectMetadataIdentities().toHttpHeader());
         }

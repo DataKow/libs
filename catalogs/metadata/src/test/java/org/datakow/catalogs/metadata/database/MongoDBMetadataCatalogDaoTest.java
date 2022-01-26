@@ -142,16 +142,6 @@ public class MongoDBMetadataCatalogDaoTest {
     }
 
     @Test
-    public void testAggregate_10args() throws JsonProcessingException, JSONException {
-        MongoRecordStream<MetadataCatalogRecord> records = dao.aggregate(collectionName, fiql, sort, limit, projection, groupBy, groupSort, near, coherence, groupFuncs);
-        int count = 0;
-        while(records.hasNext()){
-            JSONAssert.assertEquals(getMockRecord(count).toJson(), records.next().toJson(), false);
-            count++;
-        }
-    }
-
-    @Test
     public void testMakeAggregationPipeline() throws JSONException {
         List<Document> pipeline = dao.makeAggregationPipeline(fiql, sort, limit, projection, groupBy, groupSort, near, groupFuncs);
         String pipelineString = "[" + pipeline.stream().map(p -> p.toJson()).collect(Collectors.joining(",")) + "]";

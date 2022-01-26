@@ -15,7 +15,7 @@ public class CatalogIdentityTest {
     @Test
     public void testFromUrl() {
         
-        String catalog = "http://server.com/metaws/v1/catalogs/CATALOG_IDENTIFIER/records/abc-123-a1a2s3d/?3e3ef";
+        String catalog = "http://server.com/catalogs/CATALOG_IDENTIFIER/records/abc-123-a1a2s3d/?3e3ef";
         
         CatalogIdentity identity = CatalogIdentity.fromUrl(catalog);
         

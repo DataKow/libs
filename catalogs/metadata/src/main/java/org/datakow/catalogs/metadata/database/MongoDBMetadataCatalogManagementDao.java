@@ -136,54 +136,38 @@ public class MongoDBMetadataCatalogManagementDao {
      */
     public boolean createCatalog(
             String catalogIdentifier, 
-            String collectionName, 
-            boolean createCollection, 
+            String collectionName,
             boolean indexStorageObject, 
-            boolean setDefaultRetentionPolicy, String publisher) {
+            String publisher) {
         
         try {
             
-            if (!catalogIdentifier.equals("catalogs") && (!ops.collectionExists("catalogs") || !catalogRecordExists("catalogs"))){
-                createCatalog("catalogs", "catalogs", true, true, false, "datakow");
-                createIndex("catalogs", new MongoIndex("Doc.Collection-Name", "Doc.Collection-Name", "ASC"));
-                createIndex("catalogs", new MongoIndex("Doc.Catalog-Identifier", "Doc.Catalog-Identifier", "ASC"));
+            // if (catalogIdentifier.equals("catalogs")  || 
+            //     catalogIdentifier.equals("DATAKOW_OBJECTS") || 
+            //     catalogIdentifier.equals("subscriptions")) {
+            //     initializeDatakow();
+            // }
+            
+            Logger.getLogger(MongoDBMetadataCatalogManagementDao.class.getName()).log(Level.FINE, "Creating collection {0}", collectionName);
+            if (ops.collectionExists(collectionName)){
+                ops.dropCollection(collectionName);
             }
             
-            //If the collection doesn't exist, create it
-            if (!collectionName.equals("DATAKOW_OBJECTS")){
-                Logger.getLogger(MongoDBMetadataCatalogManagementDao.class.getName()).log(Level.FINE, "Creating collection {0}", collectionName);
-                if (createCollection){
-                    if (!ops.collectionExists(collectionName)){
-                        ops.createCollection(collectionName);
-                    }
-                }
+            ops.createCollection(collectionName);
+
+            if (catalogRecordExists(catalogIdentifier)){
+                metaDao.deleteByQuery("catalogs", "Doc.Catalog-Identifier==" + catalogIdentifier);
             }
 
             createCatalogRecord(catalogIdentifier, collectionName, publisher);
             
-            //If we want to index the storage object, create the indexes
-            if (!collectionName.equals("DATAKOW_OBJECTS") && indexStorageObject){
+            if (indexStorageObject){
                 Logger.getLogger(MongoDBMetadataCatalogManagementDao.class.getName()).log(Level.FINE, "Indexing storage object for collection {0}", collectionName);
                 ensureStorageIndexes(collectionName);
             }
             
-            if (!collectionName.equals("DATAKOW_OBJECTS")){
-                ensureMarkForDeleteIndex(collectionName);
-            }
-            
-            if (collectionName.equals("DATAKOW_OBJECTS")){
-                createObjectCatalog();
-            }
-            
-            //If we want to set the default retention period, set it.
-            if (!collectionName.equals("DATAKOW_OBJECTS") && setDefaultRetentionPolicy == true){
-                List<DataRetentionPolicy> policies = new ArrayList<>();
-                DataRetentionPolicy policy = new DataRetentionPolicy();
-                policy.setRetentionDateKey("Storage.Publish-Date");
-                policy.setRetentionPeriodInDays(7);
-                policies.add(policy);
-                saveDataRetentionPolicy(catalogIdentifier, policies, publisher);
-            }
+            ensureMarkForDeleteIndex(collectionName);
+
             return true;
             
         } catch (Exception e) {
@@ -253,6 +237,26 @@ public class MongoDBMetadataCatalogManagementDao {
         saveSchema(catalog.getCatalogIdentifier(), schema, publisher);
         
     }
+
+    public void initializeDatakow() throws IOException
+    {
+        if (!ops.collectionExists("catalogs") || !catalogRecordExists("catalogs")){
+            createCatalog("catalogs", "catalogs", true, "datakow");
+            createIndex("catalogs", new MongoIndex("Doc.Collection-Name", "Doc.Collection-Name", "ASC"));
+            createIndex("catalogs", new MongoIndex("Doc.Catalog-Identifier", "Doc.Catalog-Identifier", "ASC"));
+        }
+
+        if (!ops.collectionExists("DATAKOW_OBJECTS.files") || !catalogRecordExists("DATAKOW_OBJECTS")){
+            createObjectCatalog();
+        }
+
+        if (!ops.collectionExists("subscriptions") || !catalogRecordExists("subscriptions")){
+            createCatalog("subscriptions", "subscriptions", true, "datakow");
+            createIndex("subscriptions", new MongoIndex("Doc.id", "Doc.Id", "DESC"));
+            createIndex("subscriptions", new MongoIndex("Doc.catalogIdentifier", "Doc.catalogIdentifier", "DESC"));
+            createIndex("subscriptions", new MongoIndex("Doc.endpointIdentifier", "Doc.endpointIdentifier", "DESC"));
+        }
+    }
     
     /**
      * Creates an index on all of the Storage.* properties.
@@ -279,12 +283,15 @@ public class MongoDBMetadataCatalogManagementDao {
     private void ensureMarkForDeleteIndex(String collectionName){
         createIndex(collectionName, new MongoIndex("mark_for_delete", "Doc.markForDelete", "ASC"));
     }
-    
+
     /**
      * Creates the object catalog named DATAKOW_OBJECTS and adds the appropriate indexes
+     * @throws IOException
      */
-    private void createObjectCatalog(){
+    private void createObjectCatalog() throws IOException{
         
+        createCatalogRecord("DATAKOW_OBJECTS", "DATAKOW_OBJECTS", "datakow");
+
         Logger.getLogger(MongoDBMetadataCatalogManagementDao.class.getName()).log(Level.FINE, "About to create the Objects files collection");
         if (!ops.collectionExists("DATAKOW_OBJECTS.files")){
             ops.createCollection("DATAKOW_OBJECTS.files");
@@ -312,11 +319,9 @@ public class MongoDBMetadataCatalogManagementDao {
         Logger.getLogger(MongoDBMetadataCatalogManagementDao.class.getName()).log(Level.FINE, "About to index the Objects chunks collection");
 
         compoundDef = new CompoundIndexDefinition(new Document().append("files_id", 1).append("n", 1)).named("files_id_1_n_1").unique();
-        ops.indexOps("DATAKOW_OBJECTS.chunks").ensureIndex(compoundDef);
-
-        
+        ops.indexOps("DATAKOW_OBJECTS.chunks").ensureIndex(compoundDef); 
     }
-    
+
     /**
      * Deletes a catalog by deleting the collection and the record in the catalogs catalog.
      * 

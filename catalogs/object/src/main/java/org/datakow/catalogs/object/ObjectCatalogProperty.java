@@ -20,13 +20,13 @@ public class ObjectCatalogProperty {
     public static final String LENGTH_KEY = "length";
     public static final String CONTENT_TYPE_KEY = "contentType";
     public static final String MD5_KEY = "md5";
-    public static final String METADATA_CATALOG_IDENTIFIERS_KEY = "Metadata-Catalog-Identifiers";
+    //public static final String METADATA_CATALOG_IDENTIFIERS_KEY = "Metadata-Catalog-Identifiers";
     
     public static final String IDENTITIES_PATH = METADATA_KEY + "." + IDENTITIES_KEY;
     public static final String METADATA_IDENTITIES_PATH = IDENTITIES_PATH + "." + METADATA_IDENTITIES_KEY;
     public static final String RECORD_IDENTIFIER_PATH = IDENTITIES_PATH + "." + RECORD_IDENTIFIER_KEY;
     public static final String REALM_PATH = IDENTITIES_PATH + "." + REALM_KEY;
-    public static final String METADATA_CATALOG_IDENTIFIERS_PATH = IDENTITIES_PATH + "." + METADATA_CATALOG_IDENTIFIERS_KEY;
+    //public static final String METADATA_CATALOG_IDENTIFIERS_PATH = IDENTITIES_PATH + "." + METADATA_CATALOG_IDENTIFIERS_KEY;
     
     
     

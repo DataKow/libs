@@ -125,7 +125,7 @@ public class SubscriptionWebserviceClient {
     public List<QueryStringSubscription> getByUsername(String username) throws IOException, JsonProcessingException{
         
         setupCorrelationId();
-        HttpGet getRequest = new HttpGet(baseUrl + "/subscriptions/users/" + username);
+        HttpGet getRequest = new HttpGet(baseUrl + "/users/" + username + "/subscriptions");
         String requestId = UUID.randomUUID().toString();
         Header requestIdHeader = new BasicHeader("X-Request-ID", requestId);
         getRequest.setHeaders(getRequiredHeaders());
@@ -171,7 +171,7 @@ public class SubscriptionWebserviceClient {
     public List<QueryStringSubscription> getByCatalogIdentifier(String catalogIdentifier) throws IOException, JsonProcessingException{
         
         setupCorrelationId();
-        HttpGet getRequest = new HttpGet(baseUrl + "/subscriptions/catalogs/" + catalogIdentifier);
+        HttpGet getRequest = new HttpGet(baseUrl + "/catalogs/" + catalogIdentifier + "/subscriptions");
         String requestId = UUID.randomUUID().toString();
         Header requestIdHeader = new BasicHeader("X-Request-ID", requestId);
         getRequest.setHeaders(getRequiredHeaders());
@@ -218,7 +218,7 @@ public class SubscriptionWebserviceClient {
     public List<QueryStringSubscription> getByEndpointIdentifier(String endpointIdentifier) throws IOException, JsonProcessingException{
         
         setupCorrelationId();
-        HttpGet getRequest = new HttpGet(baseUrl + "/subscriptions/endpoints/" + endpointIdentifier);
+        HttpGet getRequest = new HttpGet(baseUrl + "/endpoints/" + endpointIdentifier + "/subscriptions");
         String requestId = UUID.randomUUID().toString();
         Header requestIdHeader = new BasicHeader("X-Request-ID", requestId);
         getRequest.setHeaders(getRequiredHeaders());
