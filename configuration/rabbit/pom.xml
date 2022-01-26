@@ -42,6 +42,14 @@
             <url>https://datakow-041324048525.d.codeartifact.us-west-2.amazonaws.com/maven/datakow/</url>
         </repository>
     </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>datakow-datakow</id>
+            <name>datakow-datakow</name>
+            <url>https://datakow-041324048525.d.codeartifact.us-west-2.amazonaws.com/maven/datakow/</url>
+        </repository>
+    </repositories>
     
     <build>
         <plugins>
