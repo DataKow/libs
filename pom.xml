@@ -16,18 +16,18 @@
     </properties>
 
     <modules>
-        <module>catalogs/metadata</module>
-        <module>catalogs/object</module>
-        <module>catalogs/subscription</module>
-        <module>configuration/application</module>
-        <module>configuration/mongo</module>
-        <module>configuration/rabbit</module>
-        <module>core/components</module>
-        <module>core/exception</module>
-        <module>core/fiql</module>
-        <module>core/security</module>
-        <module>messaging/events</module>
-        <module>messaging/notification</module>
+        <module>metadata</module>
+        <module>object</module>
+        <module>subscription</module>
+        <module>application</module>
+        <module>mongo</module>
+        <module>rabbit</module>
+        <module>components</module>
+        <module>exception</module>
+        <module>fiql</module>
+        <module>security</module>
+        <module>events</module>
+        <module>notification</module>
         
     </modules>
 

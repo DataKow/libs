@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.datakow.core</groupId>
-    <artifactId>exception</artifactId>
-    <version>2.0.2-SNAPSHOT</version>
+    
+    <name>catalogs-object</name>
+    <groupId>org.datakow.catalogs</groupId>
+    <artifactId>object</artifactId>
+    <version>3.3.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -23,12 +26,45 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
+    
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.datakow.configuration</groupId>
+            <artifactId>mongo</artifactId>
+            <version>2.0.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.datakow.core</groupId>
+            <artifactId>fiql</artifactId>
+            <version>2.1.3-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.datakow.core</groupId>
             <artifactId>components</artifactId>
             <version>2.2.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
         </dependency>
     </dependencies>
 
@@ -37,16 +73,11 @@
             <id>datakow-datakow</id>
             <name>datakow-datakow</name>
             <url>https://datakow-041324048525.d.codeartifact.us-west-2.amazonaws.com/maven/datakow/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>datakow-datakow</id>
-            <name>datakow-datakow</name>
-            <url>https://datakow-041324048525.d.codeartifact.us-west-2.amazonaws.com/maven/datakow/</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
@@ -78,5 +109,5 @@
             </plugin>
         </plugins>
     </build>
-
+    
 </project>

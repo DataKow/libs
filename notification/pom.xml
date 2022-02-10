@@ -2,10 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.datakow.messaging</groupId>
-    <artifactId>events</artifactId>
-    <version>2.1.6-SNAPSHOT</version>
+    <artifactId>notification</artifactId>
+    <version>2.0.5-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
@@ -51,16 +50,12 @@
             <id>datakow-datakow</id>
             <name>datakow-datakow</name>
             <url>https://datakow-041324048525.d.codeartifact.us-west-2.amazonaws.com/maven/datakow/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </distributionManagement>
 
-    <repositories>
-        <repository>
-            <id>datakow-datakow</id>
-            <name>datakow-datakow</name>
-            <url>https://datakow-041324048525.d.codeartifact.us-west-2.amazonaws.com/maven/datakow/</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
@@ -92,6 +87,4 @@
             </plugin>
         </plugins>
     </build>
-    
-   
 </project>
